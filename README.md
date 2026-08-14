@@ -21,9 +21,34 @@ Menší webová aplikace inspirovaná Instagramem, vytvořená v ASP.NET Core. P
 - HTML / CSS (Bootstrap)
 - SQL
 
-## Architektura
+## Náhled
 
-Aplikace využívá **MVC (Model-View-Controller)** architekturu, která odděluje datovou vrstvu, aplikační logiku a prezentační část.
+![Feed](images/feed.png)
+
+![Profil](images/profile.png)
+
+## Spuštění
+
+Pro spuštění aplikace není potřeba žádná externí databáze. Databáze je součástí projektu a nachází se v souboru `app.db`.
+
+### Požadavky
+
+- .NET SDK
+- Vývojové prostředí podporující .NET (např. Rider nebo Visual Studio)
+
+### Postup
+
+1. Naklonujte repository:
+   ```bash
+   git clone https://github.com/username/mini-instagram-aspnet.git
+
+2. Otevřete projekt ve vývojovém prostředí.
+   
+3. V terminálu v kořenové složce projektu spusťte:
+   ```bash
+   dotnet run
+
+4. Otevřete adresu aplikace uvedenou v terminálu.
 
 ## Poznámka
 
