@@ -40,7 +40,7 @@ Pro spuštění aplikace není potřeba žádná externí databáze. Databáze j
 
 1. Naklonujte repository:
    ```bash
-   git clone https://github.com/username/mini-instagram-aspnet.git
+   git clone https://github.com/Hoznar/Mini-Instagram.git
 
 2. Otevřete projekt ve vývojovém prostředí.
    
