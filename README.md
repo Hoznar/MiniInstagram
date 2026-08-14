@@ -25,7 +25,7 @@ Menší webová aplikace inspirovaná Instagramem, vytvořená v ASP.NET Core. P
 
 ![Feed](images/feed.png)
 
-![Profil](images/profile.png)
+![Login](images/login.png)
 
 ## Spuštění
 
