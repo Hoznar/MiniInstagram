@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Post";
+}
+
+<div class="container d-flex justify-content-center align-items-center mt-5">
+    <div class="card p-4 shadow-lg card-dark" style="width: 100%; max-width: 400px;">
+        <span class="text-white text-center fw-bolder mb-2">Opravdu si přejete odstranit účet?</span>
+        <div class="d-flex justify-content-center">
+            <form asp-controller="Account" asp-action="DeleteConfirm" method="post">
+                <button type="submit" class="btn p-0">
+                    <a class="btn btn-danger me-5">Ano</a>
+                </button>
+            </form>
+            <a class="btn btn-secondary" style="height: 100%" asp-controller="Profile" asp-action="Edit">Ne</a>
+        </div>
+    </div>
+</div>

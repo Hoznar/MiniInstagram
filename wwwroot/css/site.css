@@ -1,0 +1,141 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Zrušíme scrollbar pro firefox a chrome */
+.scrollbar-hidden {
+  scrollbar-width: none;
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.gradient-bg-1 {
+  background: linear-gradient(135deg, #F58634, #EC268F);
+}
+
+.card-dark {
+  background-color: #212529;
+  border: 1px darkgrey solid;
+  border-radius: 5px;
+}
+
+.body-flex {
+  min-height: 100vh;
+  background: #15181b;
+  height: 100%;
+  margin: 0;
+}
+
+.main-flex {
+  display: flex;
+  flex-wrap: nowrap;
+  height: 100vh;
+  max-height: 100vh;
+}
+
+/* Chceme aby sidebar byl neustále vidět a nebyl scrollable */
+.sidebar {
+  position: sticky;
+  height: 100vh;
+  box-sizing: border-box;
+  box-shadow: 3px 0 20px rgba(0, 0, 0, 0.56);
+}
+
+.feed {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 100vh;
+}
+
+.container-feed {
+  width: 40%;
+  min-width: 750px;
+}
+
+.post {
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.input {
+  height: 100px;
+  max-height: 350px;
+  resize: vertical;
+}
+
+.input-message {
+  padding: 10px;
+  border-top: 1px solid white;
+}
+
+.comment {
+  resize: none;
+  height: auto;
+}
+
+.image-box {
+  overflow: hidden;
+  position: relative;
+}
+
+.image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.icon:hover {
+  filter: invert(0.5);
+}
+
+/* Chceme aby zprávy byly scrollable a nechaly místo pro input */
+.msg-container {
+  overflow-y: auto;
+  max-height: calc(100vh - 100px);
+}
+
+.msg {
+  border-radius: 25px
+}
+
+.msg-left {
+  background-color: #1f2226;
+}
+
+.msg-right {
+  background-color: #32363a;
+  flex-direction: row-reverse;
+}

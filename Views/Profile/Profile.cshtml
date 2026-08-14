@@ -1,0 +1,90 @@
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model net08.Models.ViewModels.ProfileViewModel
+@{
+    ViewData["Title"] = "Profile";
+    var user = Model.user;
+    var loggedId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+}
+
+<div class="container-md container-feed">
+<!-- V "hlavičce" máme detajly o uživately -->
+<div class="row align-items-center border-bottom mt-4">
+    <div class="col d-flex m-3 justify-content-center">
+        
+        <!-- Vykreslíme jeho profilovku, nebo defaultní profilovku -->
+        <img src="data:image/jpg;base64,@Convert.ToBase64String(user.Avatar)" alt="Profile picture" width="200px" height="200px" class="img-fluid rounded-circle">
+    </div>
+
+    <!-- Základní informace jako je jméno, věk, počet sledujících -->
+    <div class="col">
+        <p class="text-white fs-3">@user.UserName</p>
+        <div class="d-flex justify-content-start gap-3">
+            <p class="text-white">@user.FirstName @user.LastName</p>
+            <p class="text-secondary">@user.Age</p>
+        </div>
+        <div class="d-flex justify-content-start gap-3">
+            <p class="text-white">Sledující (@user.Followed.Count)</p>
+            <p class="text-white">Sleduje (@user.Following.Count)</p>
+        </div>
+        <!-- Pokud jde o uživatelův profil, má možnost ho upravit -->
+        @if (user.Id == loggedId) {
+            <a class="btn btn-primary" asp-area="" asp-controller="Profile" asp-action="Edit">Upravit Profil</a>
+        }
+        else {
+            <div class="d-flex">
+                <form asp-controller="Profile" asp-action="Follow" asp-route-id="@user.Id" method="post">
+                    <button type="submit" class="btn p-0">
+                        @if (user.Followed.Any(u => u.Id == loggedId)) {
+                            <button class="me-3 btn btn-danger">Přestat sledovat</button>
+                        }
+                        else {
+                            <button class="me-3 btn btn-secondary">Sledovat</button>
+                        }
+                    </button>
+                </form>
+                <a class="btn btn-secondary" asp-action="Show" asp-controller="Message" asp-route-selectedId="@user.Id">Poslat zprávu</a>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Můžeme si zobrazit buď příspěvky nebo komentáře od uživatele -->
+<div class="row align-items-center mt-4">
+    <div class="d-flex justify-content-center gap-3">
+        <a class="btn btn-outline-light" asp-controller="Profile" asp-action="Show" asp-route-id="@Model.user.Id" asp-route-type="posts">Příspěvky</a>
+        <a class="btn btn-outline-light" asp-controller="Profile" asp-action="Show" asp-route-id="@Model.user.Id" asp-route-type="comments">Komentáře</a>
+    </div>
+    
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Rozhodneme se co se má vypsat (příspěvky nebo komentáře) podle zvolené možnosti -->
+            @if (ReferenceEquals(ViewData["ContentType"], "posts")) {
+                @foreach (Post post in Model.posts) {
+                    <div class="col-4 mb-4 image-box" style="width: 250px; height: 250px">
+                        <a asp-controller="Post" asp-action="Show" asp-route-id="@post.Id">
+                            <img src="data:image/jpg;base64,@Convert.ToBase64String(post.Image)" alt="Post Image" class="img-fluid">
+                        </a>
+                    </div>
+                }
+            }
+            else if (ReferenceEquals(ViewData["ContentType"], "comments")) {
+                @foreach (Comment comment in Model.comments) {
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="data:image/jpg;base64,@Convert.ToBase64String(comment.Author.Avatar)" alt="User Avatar" class="rounded-circle me-3" width="40px" height="40px">
+                        <span class="me-2 text-white">@comment.Author.UserName:</span>
+                        <span class="me-2 text-white fw-light">@comment.Text</span>
+                        <small class="me-2 text-muted fw-lighter">@comment.DateCreated.ToString("dd/MM/yyyy HH:mm")</small>
+                        <span class="text-white">
+                            U příspěvku od uživatele
+                            <a asp-controller="Post" asp-action="Show" asp-route-id="@comment.PostId">
+                                <span class="fw-bold">@comment.Post.User.UserName</span>.
+                            </a>
+                        </span>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+</div>

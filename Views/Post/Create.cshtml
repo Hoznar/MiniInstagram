@@ -1,0 +1,26 @@
+﻿@model net08.Models.ViewModels.NewPostViewModel
+@{
+ViewData["Title"] = "Create New Post";
+}
+
+<div class="container-md container-feed">
+    <div class="row align-items-center mt-4">
+        <div class="d-flex justify-content-center mb-3">
+            <form asp-action="Create" method="post" enctype="multipart/form-data" class="w-75">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="mb-3 form-group input-group-lg">
+                    <textarea asp-for="Text" maxlength="250" class="form-control bg-black border-secondary text-white input" placeholder="Napište text..."></textarea>
+                    <span asp-validation-for="Text" class="text-danger"></span>
+                </div>
+                <div class="mb-3 form-group">
+                    <p for="Picture" class="form-label fw-bold text-white">Obrázek</p>
+                    <input asp-for="Image" class="form-control bg-black border-secondary text-secondary" type="file"/>
+                    <span asp-validation-for="Image" class="text-danger"></span>
+                </div>
+                <div class="mb-3 form-group">
+                    <button type="submit" class="btn btn-primary w-100">Sdílet Příspěvek</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

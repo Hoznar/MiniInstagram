@@ -1,0 +1,65 @@
+﻿@using System.Security.Claims
+@model net08.Models.ViewModels.MessageViewModel
+@{
+    ViewData["Title"] = "Post";
+    var loggedId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+}
+
+<div class="container-md" style="width: 75vw">
+    <div class="container mb-2">
+        <div class="row mt-2">
+            
+            <!-- Zobrazíme všechny uživatele se kterými byla zahájena konverzace. -->
+            <div class="col-md-3 border-end" style="height: 98vh">
+                <span class="text-white fw-bolder">Zprávy</span>
+                @if (Model.Users.Any()) {
+                    <ul class="list-group mt-2">
+                        @foreach (var user in Model.Users) {
+                            <li class="list-group-item bg-dark mb-2 @(user.Id == Model.SelectedId ? "active" : "")">
+                                <a class="text-decoration-none text-white" asp-action="Show" asp-controller="Message" asp-route-selectedId="@user.Id">
+                                    <img src="data:image/jpg;base64,@Convert.ToBase64String(@user.Avatar)" alt="Profile picture" width="35px" height="35px" class="rounded-circle me-3">
+                                    @user.UserName
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                }
+                else {
+                    <p class="text-white mt-4">Žádné zahájené konverzace.</p>
+                }
+            </div>
+
+            <!-- Pokud jsme rozklikli uživatele, zobrazíme všechny vyměněné zprávy mezi uživateli -->
+            <!-- Jsem si vědom že tohle není efektivní řešení, při větším množství zpráv velmi pomalé !!! -->
+            <div class="col-md-9 d-flex flex-column justify-content-center align-items-center">
+                @if (Model.SelectedId != -1) {
+                    <div class="flex-grow-1 p-3" style="height: 70vh; width: 100%">
+                        <div class="msg-container">
+                            @foreach (var message in Model.Messages) {
+                                <div class="mb-3 d-flex align-items-center">
+                                    <div class="d-flex me-2 align-items-center p-1 flex-grow-1 msg @(message.SenderId == loggedId ? "msg-right" : "msg-left")">
+                                        <img src="data:image/jpg;base64,@Convert.ToBase64String(@message.Sender.Avatar)" alt="Profile picture" width="35px" height="35px" class="rounded-circle mx-2">
+                                        <span class="text-white mx-2">@message.Text</span>
+                                    </div>
+                                    <small class="text-muted fw-lighter">@message.Date.ToString("dd/MM/yyyy HH:mm")</small>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Pod zprávami máme input pro poslání zprávy uživateli -->
+                        <div class="mt-auto">
+                            <form asp-action="Send" asp-controller="Message" method="post" class="d-flex mt-3">
+                                <input type="hidden" asp-for="SelectedId" value="@Model.SelectedId">
+                                <textarea asp-for="Text" rows="1" maxlength="250" class="form-control bg-black border-secondary text-white me-2 input comment" placeholder="Napište zprávu..." required></textarea>
+                                <button class="btn btn-primary">Poslat</button>
+                            </form>
+                        </div>
+                    </div>
+                }
+                else {
+                    <p class="text-white">Žádné zprávy</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>

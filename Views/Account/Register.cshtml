@@ -1,0 +1,55 @@
+﻿@model net08.Models.ViewModels.RegisterViewModel
+@{
+    Layout = "_Account";
+    ViewData["Title"] = "Register";
+}
+
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="card p-4 shadow-lg card-dark" style="width: 100%; max-width: 400px;">
+        <h2 class="text-center text-white mb-4">Vytvořit nový účet</h2>
+        <form asp-action="Register" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3 form-group">
+                <p for="Avatar" class="form-label fw-bold text-white">Profilový obrázek</p>
+                <input asp-for="Avatar" class="form-control bg-black border-secondary text-secondary" type="file"/>
+                <span asp-validation-for="Avatar" class="text-danger"></span>
+            </div>
+            <div class="mb-3 form-group">
+                <p for="FirstName" class="form-label fw-bold text-white">Osobní údaje</p>
+                <input asp-for="FirstName" class="form-control bg-black border-secondary text-white" id="FirstName" placeholder="Jméno"/>
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="mb-3 form-group">
+                <input asp-for="LastName" class="form-control bg-black border-secondary text-white" placeholder="Příjmení"/>
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="mb-5 form-group">
+                <input asp-for="Age" class="form-control bg-black border-secondary text-white" placeholder="Věk"/>
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+            <div class="mb-3 form-group">
+                <label for="Username" class="form-label fw-black text-white">Přihlašovací údaje</label>
+                <input asp-for="Username" class="form-control bg-black border-secondary text-white" id="Username" placeholder="Uživatelské jméno"/>
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="mb-3 form-group">
+                <input asp-for="Email" class="form-control bg-black border-secondary text-white" placeholder="Email"/>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="mb-3 form-group">
+                <input asp-for="Password" class="form-control bg-black border-secondary text-white" placeholder="Heslo"/>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="mb-3 form-group">
+                <input asp-for="ConfirmPassword" class="form-control bg-black border-secondary text-white" placeholder="Podtrvrdit heslo"/>
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="mb-3 form-group">
+                <button type="submit" class="btn btn-primary w-100">Zaregistrovat</button>
+            </div>
+            <div class="text-center mt-3">
+                <p class="text-light">Máte už existující účet? <a asp-controller="Account" asp-action="Login">Přihlásit se</a></p>
+            </div>
+        </form>
+    </div>
+</div>

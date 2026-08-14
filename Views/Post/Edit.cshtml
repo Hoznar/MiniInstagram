@@ -1,0 +1,24 @@
+﻿@model net08.Models.ViewModels.NewPostViewModel
+@{
+ViewData["Title"] = "Post";
+}
+
+<div class="container-md container-feed">
+    <div class="row align-items-center mt-4">
+        <div class="d-flex justify-content-center mb-3">
+            <form asp-action="Edit" asp-controller="Post" method="post" class="w-75">
+                <h2 class="text-center text-white mb-4">Upravit příspěvek</h2>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="mb-3 form-group">
+                    <textarea asp-for="Text" maxlength="250" class="form-control bg-black border-secondary text-white input">@Model.Text</textarea>
+                    <span asp-validation-for="Text" class="text-danger"></span>
+                </div>
+                <div class="mb-3 form-group d-flex justify-content-center">
+                    <input type="hidden" asp-for="Id"/>
+                    <button type="submit" class="btn btn-primary w-50 me-5">Upravit</button>
+                    <a asp-action="Show" asp-route-id="@Model.Id" class="btn btn-secondary w-50">Zrušit</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

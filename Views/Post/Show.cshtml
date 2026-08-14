@@ -1,0 +1,127 @@
+﻿@using System.Security.Claims
+@model net08.Models.ViewModels.PostViewModel
+@{
+ViewData["Title"] = "Post";
+var loggedId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+}
+
+<div class="container-md container-feed">
+<!-- Obdovně jako u Feedu zobrazíme příspěvěk, akorát navíc zobrazíme komentáře -->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+
+                <!-- Vykreslíme uživatelovu profilovku a informace -->
+                <div class="d-flex align-items-center mb-2">
+                    <img src="data:image/jpg;base64,@Convert.ToBase64String(@Model.User.Avatar)" alt="Profile picture" width="35px" height="35px" class="rounded-circle me-3">
+                    <a asp-controller="Profile" asp-action="Show" asp-route-id="@Model.User.Id" class="text-decoration-none">
+                        <p class="mb-0 text-white me-2 fw-bold">@Model.User.UserName</p>
+                    </a>
+                    <p class="mb-0 text-muted fw-light">@Model.Post.ReleaseDate.ToString("dd/MM/yyyy HH:mm")</p>
+                </div>
+
+                <!-- Pokud je autorem příspěvku přihlášený uživatel, může příspěvek upravit -->
+                @if (Model.User.Id == loggedId) {
+                    <div class="d-flex align-items-center mb-2">
+                        <a asp-controller="Post" asp-action="Edit" asp-route-id="@Model.Post.Id">
+                            <img src="~/pictures/post-edit.png" width="24px" height="24px" alt="Edit Icon" class="ms-2 icon">
+                        </a>
+                        <form asp-controller="Post" asp-action="Delete" asp-route-id="@Model.Post.Id" method="post">
+                            <button type="submit" class="btn p-0">
+                                <img src="~/pictures/remove.png" width="24px" height="24px" alt="Remove Icon" class="ms-2 icon">
+                            </button>
+                        </form>
+                    </div>
+                }
+            </div>
+
+            <!-- Text příspěvku včetně tagů -->
+            <p class="text-white">@Model.Post.Text</p>
+            <div class="mb-3">
+                @foreach (var tag in Model.Post.Tags) {
+                    <span class="me-2" style="color: #0c63e4">@tag</span>
+                }
+            </div>
+
+            <!-- Zobrazení obrázek příspěvku (Vždy jako čtvereček) -->
+            <div class="image-box" style="width: 100%; height: 450px">
+                <img src="data:image/jpg;base64,@Convert.ToBase64String(Model.Post.Image)" alt="Post image" class="img-fluid">
+            </div>
+
+            <!-- Zobrazení počtu lajků a komentářů -->
+            <div class="d-flex align-items-center mb-3 mt-2">
+                <form asp-controller="Post" asp-action="Like" asp-route-id="@Model.Post.Id" method="post">
+                    <button type="submit" class="btn p-0">
+                        @if (Model.Post.LikedBy.Any(pl => pl.UserId == loggedId)) {
+                            <img src="~/pictures/post-like-full.png" width="24px" height="24px" alt="Like Icon" class="me-2 icon">
+                        }
+                        else {
+                            <img src="~/pictures/post-like.png" width="24px" height="24px" alt="Like Icon" class="me-2 icon">
+                        }
+                    </button>
+                </form>
+                <span class="text-white me-3">@Model.Post.LikedBy.Count</span>
+                <img src="~/pictures/post-comment.png" width="24px" height="24px" alt="Comment Icon" class="me-2">
+                <span class="text-white">@Model.Comments.Count()</span>
+            </div>
+
+            <!-- Formulář pro okomentování příspěvku -->
+            <div class="mt-4">
+                <form asp-action="Comment" method="post" class="d-flex">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group flex-grow-1">
+                        <input type="hidden" name="Id" value="@Model.Post.Id">
+                        <textarea asp-for="NewComment" rows="1" maxlength="250" class="form-control bg-black border-secondary text-white input me-2 comment" placeholder="Napište komentář..." required></textarea>
+                        <span asp-validation-for="NewComment" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Odeslat</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Vypsání všech komentářů -->
+            <div class="mt-4">
+                @foreach (var comment in Model.Comments) {
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex align-items-center">
+                            <img src="data:image/jpg;base64,@Convert.ToBase64String(comment.Author.Avatar)" alt="User Avatar" class="rounded-circle me-3" width="40px" height="40px">
+                            <a asp-controller="Profile" asp-action="Show" asp-route-id="@comment.Author.Id" class="text-decoration-none">
+                                <span class="me-2 text-white">@comment.Author.UserName:</span>
+                            </a>
+                            <span class="me-2 text-white fw-light">@comment.Text</span>
+                            <small class="text-muted fw-lighter">@comment.DateCreated.ToString("dd/MM/yyyy HH:mm")</small>
+                        </div>
+
+                        <!-- Uživatel může dát like na komentář -->
+                        <div class="d-flex align-content-center">
+                            <form asp-controller="Post" asp-action="LikeComment" asp-route-id="@comment.Id" method="post">
+                                <button type="submit" class="btn p-0">
+                                    @if (comment.LikedBy.Any(cl => cl.UserId == loggedId)) {
+                                        <img src="~/pictures/post-like-full.png" width="24px" height="24px" alt="Like Icon" class="me-2">
+                                    }
+                                    else {
+                                        <img src="~/pictures/post-like.png" width="24px" height="24px" alt="Like Icon" class="me-2">
+                                    }
+                                </button>
+                            </form>
+                            <span class="text-white">@comment.LikedBy.Count</span>
+
+                            <!-- Pokud je autor komentáře přihlášený uživatel, může svůj komenář odstranit -->
+                            @if (comment.Author.Id == loggedId) {
+                                <form asp-controller="Post" asp-action="DeleteComment" asp-route-id="@comment.Id" method="post">
+                                    <button type="submit" class="btn p-0">
+                                        <img src="~/pictures/remove.png" width="24px" height="24px" alt="Remove Icon" class="ms-2 icon">
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,28 @@
+﻿@model net08.Models.ViewModels.LoginViewModel
+@{
+    Layout = "_Account";
+    ViewData["Title"] = "Login";
+}
+
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="card p-4 shadow-lg card-dark" style="width: 100%; max-width: 400px;">
+        <h2 class="text-center text-white mb-4">𝓘𝓷𝓼𝓽𝓪𝓰𝓻𝓪𝓶</h2>
+        <form asp-action="Login" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3 form-group">
+                <input asp-for="Email" class="form-control bg-black border-secondary text-white" placeholder="Email"/>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="mb-3 form-group">
+                <input asp-for="Password" class="form-control bg-black border-secondary text-white" placeholder="Heslo"/>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="mb-3 form-group">
+                <button type="submit" class="btn btn-primary w-100">Přihlásit se</button>
+            </div>
+            <div class="text-center mt-3">
+                <p class="text-light">Nemáte účet? <a asp-controller="Account" asp-action="Register">Zaregistrovat se</a></p>
+            </div>
+        </form>
+    </div>
+</div>

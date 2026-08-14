@@ -1,0 +1,75 @@
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - net08</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/net08.styles.css" asp-append-version="true"/>
+</head>
+
+<!-- Stránka je rozdělena na Sidebar, který je vždy vidět, a zbytek závisí na View -->
+<body class="body-flex">
+<main class="main-flex">
+    <div class="d-flex flex-column flex-shrink-0 p-4 text-white bg-dark sidebar overflow-hidden" style="width: 250px">
+        <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none" href="/">
+            <span class="fs-4">𝓘𝓷𝓼𝓽𝓪𝓰𝓻𝓪𝓶</span>
+        </a>
+        <hr>
+        
+        <!-- Seznam všech možností co můžeme zobrazit -->
+        <ul class="nav nav-pills flex-column mb-sm-auto mb-0">
+            <li class="nav-item">
+                <a class="nav-link text-white px-0" asp-area="" asp-controller="Home" asp-action="Feed">
+                    <img src="~/pictures/side-feed.png" width="24px" height="24px" alt="Feed icon" style="margin-right: 5px">
+                    Feed
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white px-0" asp-area="" asp-controller="Message" asp-action="Show">
+                    <img src="~/pictures/side-chat.png" width="24px" height="24px" alt="Messages icon" style="margin-right: 5px">
+                    Soukromé zprávy
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white px-0" asp-area="" asp-controller="Profile" asp-action="Show" asp-route-id="@int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier))">
+                    <img src="~/pictures/side-user.png" width="24px" height="24px" alt="Profile icon" style="margin-right: 5px">
+                    Profil
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white px-0 mt-5" asp-area="" asp-controller="Post" asp-action="Create">
+                    <img src="~/pictures/side-post.png" width="24px" height="24px" alt="Share Post Icon" style="margin-right: 5px">
+                    Sdílet příspěvek
+                </a>
+            </li>
+        </ul>
+        <hr>
+        <!-- Pokud je uživatel přihlášen (Což by měl být aby se mu vůbec sidebar zobrazil), může se odhlásit -->
+        @if (User.Identity.IsAuthenticated) {
+            <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                <button type="submit" class="btn btn-link nav-link">Odhlásit se</button>
+            </form>
+        }
+    </div>
+
+    <!-- Vykreslíme zbytek podle aktuálního View() -->
+    <div role="main" class="mx-auto overflow-auto scrollbar-hidden">
+        @RenderBody()
+    </div>
+</main>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
+
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
